@@ -14,3 +14,7 @@ Concpets covered in this project are :
 - REST API Structure and Endpoints
 - Basics of database schema design
 - Role of authentication in web applications
+
+##Step 1
+
+Added a login page by applying front-end (react)
