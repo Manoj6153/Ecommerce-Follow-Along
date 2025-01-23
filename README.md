@@ -36,17 +36,25 @@
 ---
 ## MILESTONE 2  :-
  Created a structured folder hierarchy for the project.
+
 Set up a React app for the frontend.
+
 Set up a Node.js server for the backend.
+
 Configured Tailwind CSS for streamlined styling.
+
 Added optional extensions for improving development efficiency.
+
 Built a functional and styled Login Page for the frontend.
 
-
+---
 ## MILESTONE3 :- 
 Set up dedicated folders for organizing backend code effectively.
+
 Initialized and configured a Node.js server to handle API requests.
+
 Connected the application to MongoDB to store and manage data.
+
 Implemented basic error handling to ensure smooth server operation.
 
 ---
