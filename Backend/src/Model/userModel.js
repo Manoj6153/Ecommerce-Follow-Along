@@ -1,6 +1,6 @@
-const {model,schema} = require('mongoose');
+const {model,Schema} = require('mongoose');
 
-const userSchema = new schema({
+const userSchema = new Schema({
     name:{
         type: String,
         required: [true, "Please enter your name!"],
@@ -63,6 +63,6 @@ const userSchema = new schema({
 
 });
 
-const userModel=model('User',userSchema);
+const userModel= model('User',userSchema);
 
 model.exports=userModel;

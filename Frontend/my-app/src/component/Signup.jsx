@@ -43,7 +43,7 @@ export default function Example() {
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
          
-          <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-black">
+          <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-black hover:cursor-default" >
             Create your account
           </h2>
         </div>
@@ -211,13 +211,13 @@ className="size-8 absolute inset-y-0 right-0 flex items-center pr-3 text-black h
                         avatar ? (
                             <img src={URL.createObjectURL(avatar)} alt="avatar" className="h-full w-full object-cover rounded-full" />)
                             : (
-                                <RxAvatar className="h-8 w-8" />
+                                <RxAvatar className="h-full w-full" />
                             )
                     }
                 </span>
                     <label htmlFor="file-input"
-                    className="ml-5 flex items-center justify-center px-4 py-2 border border-gray-300  rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white
-                     hover:bg-gray-50">Choose a file</label>
+                    className="ml-5 mr-5 flex items-center justify-center px-4 py-2  rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600
+                     hover:bg-indigo-500 hover:cursor-pointer">Choose a file</label>
                 <span>
                     Upload a file
                 </span>
@@ -225,7 +225,7 @@ className="size-8 absolute inset-y-0 right-0 flex items-center pr-3 text-black h
                 name='avatar'
                 id='file-input'
                 accept='.jpg,.jpeg,.png'
-                onChange={handleFileSubmit}
+                onChange={(e)=>setAvatar(e.target.files[0])}
                 className="sr-only" />
             </div>
 
