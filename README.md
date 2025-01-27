@@ -91,8 +91,10 @@ Configured Multer to handle file uploads in the application. This allows users t
 
 4. Used React Router for navigation.
 
+---
 
-## Milestone 3: User Registration and Authentication
+
+## Milestone 6: User Registration and Authentication
 1. User Creation Endpoint (/create-user):
  Implemented an endpoint to create a new user.
  Validated the email to ensure the user doesn’t already exist.
