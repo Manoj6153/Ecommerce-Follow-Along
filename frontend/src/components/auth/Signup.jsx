@@ -1,52 +1,29 @@
-import { React, useState } from "react";    
-import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";        //// for toggling password visibility
-import { Link } from "react-router-dom";            /// for importing Link from react-router-dom
-import { RxAvatar } from "react-icons/rx";        /// for importing RxAvatar from react-icons/rx
-import axios from "axios";    
-import ValidationFormObject from "../../validation"; 
+import { React, useState } from "react";
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+import styles from "../../styles/styles";
+import { Link } from "react-router-dom";
+import { RxAvatar } from "react-icons/rx";
+import axios from "axios";
 
 const Signup = () => {
-  const [email, setEmail] = useState("");   /// for setting email
-  const [name, setName] = useState("");       /// for setting name
-  const [password, setPassword] = useState("");    /// for setting password
-  const [visible, setVisible] = useState(false);     /// for toggling password visibility
-  const [avatar, setAvatar] = useState(null);     /// for setting avatar
-  const [errors, setErrors] = useState({});       /// for setting errors
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [password, setPassword] = useState("");
+  const [visible, setVisible] = useState(false);
+  const [avatar, setAvatar] = useState(null);
 
-  const handleFileSubmit = (e) => {     
-    const file = e.target.files[0];   
+  const handleFileSubmit = (e) => {
+    const file = e.target.files[0];
     if (file) {
-      const filePath = URL.createObjectURL(file);   
+      const filePath = URL.createObjectURL(file);
       console.log("File path:", filePath);
-      setAvatar(file);    
+      setAvatar(file);
     }
-  };  /// for handling file submission
-
-
-
-  /// for validating fields
-  const validateFields = () => {
-    const nameError = ValidationFormObject.validteName(name);   
-    const emailError = ValidationFormObject.validteEmail(email);
-    const passwordError = ValidationFormObject.validtePass(password); 
-    const newErrors = {}; 
-    if (nameError !== true) newErrors.name = nameError;     /// if nameError is not true then set newErrors.name = nameError
-    if (emailError !== true) newErrors.email = emailError;       /// if emailError is not true then set newErrors.email = emailError
-    if (passwordError !== true) newErrors.password = passwordError;     /// if passwordError is not true then set newErrors.password = passwordError
-    setErrors(newErrors);      /// set errors to newErrors
-    return Object.keys(newErrors).length === 0;    // Return true if no errors
   };
 
-
-
-  
-  
-  /// for handling form submission
   const handleSubmit = (e) => {
-    e.preventDefault();  /// for preventing default submission
-    if (!validateFields()) {
-      return; // Stop submission if validation fails
-    }
+    e.preventDefault();
+
     const newForm = new FormData();
     newForm.append("file", avatar);
     newForm.append("name", name);
@@ -55,19 +32,21 @@ const Signup = () => {
     const config = {
       headers: {
         "Content-Type": "multipart/form-data",
-        "Accept": "any",
+        Accept: "any",
       },
     };
-    
-    //axios request
-    axios.post("http://localhost:8000/api/v2/user/create-user", newForm, config).then((res)=>{
-      console.log(res.data);
-    }).catch((err)=>{
-      console.log(err);
-    })
-};
 
-return (
+    axios
+      .post("http://localhost:8000/api/v2/user/create-user", newForm, config)
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
@@ -89,17 +68,14 @@ return (
                   type="text"
                   name="name"
                   autoComplete="name"
+                  required
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className={`appearance-none block w-full px-3 py-2 border ${
-                    errors.name ? "border-red-500" : "border-gray-300"
-                  } rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
+                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 />
-                {errors.name && (
-                  <p className="text-red-500 text-xs mt-1">{errors.name}</p>
-                )}
               </div>
             </div>
+
             <div>
               <label
                 htmlFor="email"
@@ -112,15 +88,11 @@ return (
                   type="email"
                   name="email"
                   autoComplete="email"
+                  required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className={`appearance-none block w-full px-3 py-2 border ${
-                    errors.email ? "border-red-500" : "border-gray-300"
-                  } rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
+                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 />
-                {errors.email && (
-                  <p className="text-red-500 text-xs mt-1">{errors.email}</p>
-                )}
               </div>
             </div>
             <div>
@@ -135,11 +107,10 @@ return (
                   type={visible ? "text" : "password"}
                   name="password"
                   autoComplete="current-password"
+                  required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className={`appearance-none block w-full px-3 py-2 border ${
-                    errors.password ? "border-red-500" : "border-gray-300"
-                  } rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
+                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 />
                 {visible ? (
                   <AiOutlineEye
@@ -154,11 +125,9 @@ return (
                     onClick={() => setVisible(true)}
                   />
                 )}
-                {errors.password && (
-                  <p className="text-red-500 text-xs mt-1">{errors.password}</p>
-                )}
               </div>
             </div>
+
             <div>
               <label
                 htmlFor="avatar"
@@ -192,6 +161,7 @@ return (
                 </label>
               </div>
             </div>
+
             <div>
               <button
                 type="submit"
@@ -200,7 +170,7 @@ return (
                 Submit
               </button>
             </div>
-            <div className="flex items-center w-full">
+            <div className={`${styles.noramlFlex} w-full`}>
               <h4>Already have an account?</h4>
               <Link to="/login" className="text-blue-600 pl-2">
                 Sign In
@@ -212,4 +182,5 @@ return (
     </div>
   );
 };
+
 export default Signup;
