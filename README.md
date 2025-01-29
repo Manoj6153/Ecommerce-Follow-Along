@@ -131,3 +131,8 @@ Added a method to generate JWT tokens upon user login (for future use in authent
 
 
 ---
+
+## MILESTONE 8:- 
+Design the Homepage Layout.
+Set up a responsive grid layout to display multiple product cards neatly.
+Ensured the layout adapts to different screen sizes for a better user experience.
