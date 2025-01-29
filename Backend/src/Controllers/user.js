@@ -4,6 +4,7 @@ const {upload} = require("../../multer");
 const bcrypt = require("bcrypt");
 const { ErrorHandler } = require("../Utils/ErrorHandler");
 const userRouter = Router();
+const jwt = require("jsonwebtoken");
 
 
 userRouter.post("/create-user", async(req,res,next)=>{
