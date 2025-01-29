@@ -128,4 +128,6 @@ Added a method to generate JWT tokens upon user login (for future use in authent
 8. Implemented error handling for invalid credentials and server errors.
 
 
+
+
 ---
