@@ -1,10 +1,7 @@
 const express=require('express');
 const app=express();
-const userModel = require('./src/Model/userModel');
 const connectDB=require('./src/Database/db');
-const userRouter = require('./src/Controllers/user');
-
-app.use(express.json());
+const userRouter=require('./src/Controllers/user');
 
 require('dotenv').config({
     path:'./src/Config/.env'
@@ -12,7 +9,6 @@ require('dotenv').config({
 
 const port=process.env.port;
 const url=process.env.db_url;
-
 
 app.listen(3000,async ()=>{
     console.log(`Server is running on port ${port}`);
@@ -23,4 +19,6 @@ app.listen(3000,async ()=>{
     }
 })
 
-app.use('/register',userRouter);
+app.use(express.json());   
+
+app.use('/auth',userRouter);
