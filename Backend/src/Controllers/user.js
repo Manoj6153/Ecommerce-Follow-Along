@@ -7,7 +7,7 @@ const userRouter = Router();
 const jwt = require("jsonwebtoken");
 
 
-userRouter.post("/create-user", async(req,res,next)=>{
+userRouter.post("/create-user",upload.single('file'), async(req,res)=>{
     const {name, email, password} = req.body;
     const userEmail = await userModel.findOne({email:email});
     if (userEmail) {

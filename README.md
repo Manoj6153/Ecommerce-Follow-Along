@@ -79,3 +79,6 @@ Design the Homepage Layout. Set up a responsive grid layout to display multiple 
 
 # MILESTONE 9:-
 Design the Product Form with add image support and submit button functionality. With all required inputs to add items and also add multiple images.
+
+# MILESTONE 10:-
+Defined Product data structure(e.g., name, description, price, image URL) and added validation for all input. Created POST endpoint and save in MongoDB.
