@@ -132,14 +132,14 @@ Added a method to generate JWT tokens upon user login (for future use in authent
 
 ---
 
-## MILESTONE 8:-  Creating a Product Form
-Design the Homepage Layout.
-Set up a responsive grid layout to display multiple product cards neatly.
-Ensured the layout adapts to different screen sizes for a better user experience.
+## MILESTONE 8:-  Creating a Home Page
+1. Design the Homepage Layout.
+2. Set up a responsive grid layout to display multiple product cards neatly.
+3. Ensured the layout adapts to different screen sizes for a better user experience.
 
 ---
 
-## MILESTONE 9 :- 
+## MILESTONE 9 :- Creating a Product Form
 1. Create a form to input product details.
 2. Allow users to upload multiple product images.
 3. Save the entered details in the database.
