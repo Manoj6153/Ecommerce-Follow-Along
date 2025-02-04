@@ -143,3 +143,20 @@ Added a method to generate JWT tokens upon user login (for future use in authent
 1. Create a form to input product details.
 2. Allow users to upload multiple product images.
 3. Save the entered details in the database.
+
+---
+
+# **Milestone 10: Product Schema & API Endpoint**
+
+## **Objective**
+By the end of this milestone, you will:  
+✅ Learn how to write a **Product Schema** using Mongoose.  
+✅ Learn how to create an **API endpoint** to validate and store product details in MongoDB.  
+ 
+
+## **Endpoint Creation**
+1. Build a **POST** endpoint to receive product data.  
+2. Validate the incoming data.  
+3. Save the product details to **MongoDB**.  
+
+---
