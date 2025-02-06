@@ -160,3 +160,28 @@ By the end of this milestone, you will:
 3. Save the product details to **MongoDB**.  
 
 ---
+
+
+# Milestone 11 - Fetch and Display Products Data
+
+## Overview 📌
+In this milestone, we implemented the functionality to fetch all products from the backend and dynamically display them on the frontend using components.
+
+### Backend (Node.js & Express)
+1. **Created an API endpoint** to send all product data from the backend to the frontend.
+   - Added a route in `index.js` to fetch product data.
+   - Used Mongoose to retrieve product details from the database.
+   - Sent the retrieved data as a JSON response.
+
+### Frontend (React)
+2. **Created a function** to fetch product data from the backend.
+   - Used `fetch` or `axios` to make a GET request to the backend endpoint.
+   - Stored the response in a state variable using the `useState` hook.
+   - Used `useEffect` to trigger the data fetch on component mount.
+
+3. **Displayed the data dynamically** using the `ProductCard` component.
+   - Passed fetched product data as props to the `ProductCard` component.
+   - Rendered multiple `ProductCard` components dynamically using `.map()`.
+
+
+   ---
