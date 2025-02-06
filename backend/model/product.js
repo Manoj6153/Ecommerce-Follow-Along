@@ -1,47 +1,46 @@
-const mongoose = require('mongoose');
-
-const productSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
+const mongoose = require("mongoose");
+const productSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: [true, "Please provide the product name"],
+    },
+    description: {
+      type: String,
+      required: [true, "Please provide the product description"],
+    },
+    category: {
+      type: String,
+      required: [true, "Please provide the product category"],
+    },
+    tags: {
+      type: [String], // Array of tags
+      default: [],
+    },
+    price: {
+      type: Number,
+      required: [true, "Please provide the product price"],
+    },
+    stock: {
+      type: Number,
+      required: [true, "Please provide the product stock"],
+    },
+    email: {
+      type: String,
+      required: [true, "Please provide an email"],
+      match: [/.+@.+\..+/, "Please provide a valid email address"],
+    },
+    images: {
+      type: [String], // Array of image URLs (base64 or hosted links)
+      required: [true, "Please upload product images"],
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now, // Automatically set the creation date
+    },
   },
-  description: {
-    type: String,
-    required: true,
-  },
-  category: {
-    type: String,
-    required: true,
-  },
-  tags: {
-    type: [String], // Array of strings for tags
-    default: [],
-  },
-  price: {
-    type: Number,
-    required: true,
-    min: 0, // Price should not be negative
-  },
-  stock: {
-    type: Number,
-    required: true,
-    min: 0, // Stock should not be negative
-  },
-  images: {
-    type: [String], // Array of strings to store image paths
-    required: true,
-  },
-  user: { // To associate the product with the user who created it
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User', // Reference the User model
-    required: true,
-  },
-  email: {
-    type: String,
-    required: true,
+  {
+    timestamps: true,
   }
-}, { timestamps: true }); // Add timestamps for createdAt and updatedAt
-
-const Product = mongoose.model('Product', productSchema);
-
-module.exports = Product;
+);
+module.exports = mongoose.model("Products", productSchema);
