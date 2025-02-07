@@ -48,7 +48,7 @@ router.post(
         },
       });
   
-      res.status(201).json({ success: true, user });
+      res.status(201).json({ success: true, user});
     })
   );
 

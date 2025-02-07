@@ -5,7 +5,6 @@ const User = require("../model/user");
 const router = express.Router();
 const { pupload } = require("../multer");
 const path = require('path');
-const { userInfo } = require("os");
 
 const validateProductData = (data) => {
   const errors = [];
@@ -51,7 +50,6 @@ router.post(
           .status(400)
           .json({ error: "Email does not exist in the users database" });
       }
-      console.log("user",user);
       const newProduct = new Product({
         name,
         description,
@@ -63,7 +61,6 @@ router.post(
         images,
       });
       await newProduct.save();
-      console.log("66",)
       res.status(201).json({
         message: "Product created successfully",
         product: newProduct,
@@ -96,5 +93,25 @@ router.get("/get-products", async (req, res) => {
     res.status(500).json({ error: "Server error. Could not fetch products." });
   }
 });
+
+router.get('/my-products', async (req, res) => {
+  const { email } = req.query;
+  try {
+      const products = await Product.find({ email });
+      const productsWithFullImageUrl = products.map(product => {
+          if (product.images && product.images.length > 0) {
+              product.images = product.images.map(imagePath => {
+                  return imagePath;
+              });
+          }
+          return product;
+      });
+      res.status(200).json({ products: productsWithFullImageUrl });
+  } catch (err) {
+      console.error(' Server error:', err);
+      res.status(500).json({ error: 'Server error. Could not fetch products.' });
+  }
+}
+);
 
 module.exports = router;
