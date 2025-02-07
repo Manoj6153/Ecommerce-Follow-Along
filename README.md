@@ -185,3 +185,26 @@ In this milestone, we implemented the functionality to fetch all products from t
 
 
    ---
+
+
+### Milestone 12 - Fetch and Display Filtered Products Data
+
+## Overview 📌
+In this milestone, we implemented the functionality to fetch all products associated with a user's email from the backend and dynamically display them on the frontend using components.
+
+## Steps Completed ✅
+
+### Backend (Node.js & Express)
+1. **Created an API endpoint** to send all product data filtered by user email.
+   - Added a route in `index.js` to fetch products based on the user's email.
+   - Used Mongoose to query product details matching the provided email.
+   - Sent the retrieved data as a JSON response.
+
+### Frontend (React)
+2. **Created a function** to fetch filtered product data from the backend.
+   - Used `fetch` or `axios` to make a GET request to the backend endpoint.
+   - Passed the user's email as a query parameter.
+   - Stored the response in a state variable using the `useState` hook.
+   - Used `useEffect` to trigger the data fetch on component mount.
+
+3. Displayed the filtered data dynamically 
