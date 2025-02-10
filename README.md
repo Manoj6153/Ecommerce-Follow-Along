@@ -110,6 +110,13 @@
 
 ---
 
+### Milestone 13:- Edit Product Functionality
+1. Created a **PUT API endpoint** to update product details in MongoDB.
+2. Added an **Edit** button on the product card.
+3. Implemented **auto-filled form** for editing existing product details.
+4. Connected frontend with backend to send **PUT requests**.
+5. Handled errors and ensured data validation.
+
 
 
 
