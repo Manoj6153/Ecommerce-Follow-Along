@@ -88,3 +88,9 @@ Fetch & Display Products
 Created an API endpoint to fetch all products from the database.
 Implemented a frontend function to fetch and display product data dynamically.
 Used useState and useEffect to manage the data lifecycle.
+
+# MILESTONE 12:-
+Fetch & Display Filtered Products
+Created an API endpoint to fetch products based on the user's email.
+Implemented frontend logic to request and display filtered products.
+Ensured efficient state management using React hooks

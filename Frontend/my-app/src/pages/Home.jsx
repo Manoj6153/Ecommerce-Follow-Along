@@ -52,7 +52,11 @@ export const Home =()=>{
         <div className="w-full min-h-screeen p-4 display flex justify-center items-center mt-20">
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
             {productdetails.map((product,index)=>{
-                <Product key={index} {...product}/>
+                return(
+                    <>
+                    <Product {...product}/>
+                    </>
+                )
             }
             )}
         </div>

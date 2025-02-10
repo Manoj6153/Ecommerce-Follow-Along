@@ -3,11 +3,28 @@ const {productupload} = require("../../multer");
 const {Productmodel} = require("../Model/productModel");
 const productrouter = Router();
 
-productrouter.get("/",(req,res) => {
-    res.send("Product router");
+productrouter.get("/get-product", async (req,res) => {
+    try{
+        const products = await Productmodel.find();
+        const productimg = products.map((product) =>{
+            return{
+                name: product.name,
+                email: product.email,
+                description: product.description,
+                category: product.category,
+                price: product.price,
+                stock: product.stock,
+                tags: product.tags,
+                images: product.images
+        };
+    });
+        return res.status(200).json({products: productimg});
+    }catch(err){
+        console.log(err);
+    }
 })
 
-productrouter.post("/",productupload.array('files'),async (req,res) => {
+productrouter.post("/post-product",productupload.array('files'),async (req,res) => {
     const{name,description,email,price,category,stock,tags} = req.body;
      const images = req.files.map(file => file.path);
      try {
