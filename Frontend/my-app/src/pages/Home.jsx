@@ -1,6 +1,5 @@
-import React from "react";
+import React ,{ useEffect, useState}from "react";
 import { Product } from "../component/Product";
-
 const productdetails = [
     {
         image: "https://images.samsung.com/is/image/samsung/assets/in/explore/brand/5-best-android-mobile-phones-2022-in-india/banner-mobile-720x761-080422.jpg?$720_N_JPG$",
@@ -22,6 +21,29 @@ const productdetails = [
     }
 ]
 export const Home =()=>{
+    const [products, setProducts] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null); 
+    useEffect(()=>{
+        fetch("http://localhost:3001/product/get-products")
+        .then(res=>{
+            if(!res.ok){
+                throw new Error(`HTTP error! status: ${res.status}`);
+            }
+            return res.json();
+
+        })
+        .then((data)=>{
+            setProducts(data.Products);
+            setLoading(false);
+
+        })
+        .catch((error)=>{
+            console.error('error fetching product',err);
+            setError(err.message);
+            setLoading(false);
+        })
+    },[]);
     return(
         <>
         <div className="p-4 display flex justify-center items-center">
@@ -30,11 +52,7 @@ export const Home =()=>{
         <div className="w-full min-h-screeen p-4 display flex justify-center items-center mt-20">
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
             {productdetails.map((product,index)=>{
-                return(
-                    <>
-                    <Product {...product}/>
-                    </>
-                )
+                <Product key={index} {...product}/>
             }
             )}
         </div>

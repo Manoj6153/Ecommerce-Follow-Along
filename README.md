@@ -82,3 +82,9 @@ Design the Product Form with add image support and submit button functionality. 
 
 # MILESTONE 10:-
 Defined Product data structure(e.g., name, description, price, image URL) and added validation for all input. Created POST endpoint and save in MongoDB.
+
+# MILESTONE 11:-
+Fetch & Display Products
+Created an API endpoint to fetch all products from the database.
+Implemented a frontend function to fetch and display product data dynamically.
+Used useState and useEffect to manage the data lifecycle.
