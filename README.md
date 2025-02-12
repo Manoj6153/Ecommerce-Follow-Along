@@ -126,7 +126,7 @@
 - Integrated frontend with backend to send **DELETE requests**.
 ----
 
-# Milestone 15 - Creating a Navbar Component 🚀
+### Milestone 15 - Creating a Navbar Component 🚀
 1. Create a New `Nav` Component
 - The Navbar should include links to the following pages:
   - **Home**
@@ -146,7 +146,7 @@
 
 ----
 
-# Milestone 16 - Creating a Product Info Page 🛒
+### Milestone 16 - Creating a Product Info Page 🛒
 1. Create a New Product Info Page
 - The page should display detailed information about a product.
 - Include product **name, image, price, and description**.
