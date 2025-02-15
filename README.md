@@ -125,7 +125,6 @@
 - Added a **Delete** button to the product card.
 - Integrated frontend with backend to send **DELETE requests**.
 ----
-
 ### Milestone 15 - Creating a Navbar Component 🚀
 1. Create a New `Nav` Component
 - The Navbar should include links to the following pages:
@@ -145,24 +144,3 @@
 - Optimize the layout to be mobile-friendly.
 
 ----
-
-### Milestone 16 - Creating a Product Info Page 🛒
-1. Create a New Product Info Page
-- The page should display detailed information about a product.
-- Include product **name, image, price, and description**.
-2. Add a Quantity Selector
-- Allow users to select the desired quantity of the product.
-- Ensure the quantity selection updates dynamically.
-3. Implement the Add to Cart Button
-- Add a button that allows users to add the selected quantity of the product to their cart.
-- Ensure smooth user interaction and feedback after adding to cart.
-----
-
-
-
-
-
-
-
-## Contributor
-- HARDIK TAILOR (SQUAD 64)
