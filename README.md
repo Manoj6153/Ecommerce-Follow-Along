@@ -158,11 +158,3 @@
 - Ensure smooth user interaction and feedback after adding to cart.
 ----
 
-
-
-
-
-
-
-## Contributor
-- HARDIK TAILOR (SQUAD 64)
