@@ -158,3 +158,7 @@
 - Ensure smooth user interaction and feedback after adding to cart.
 ----
 
+## Milestone 17: Add Products to Cart & Store in Database
+Created the Cart Schema: Defined a schema to store cart products linked to users.
+Implemented an API endpoint: Developed a backend route to handle adding products to the cart.
+Stored Cart Data: Successfully saved product details in the database under the user's cart.
