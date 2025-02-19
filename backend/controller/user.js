@@ -74,6 +74,7 @@ router.post(
         user,
     });
 }));
+
 router.get("/profile", catchAsyncErrors(async (req, res, next) => {
   const { email } = req.query;
   if (!email) {
@@ -92,4 +93,7 @@ router.get("/profile", catchAsyncErrors(async (req, res, next) => {
           avatarUrl: user.avatar.url
       },
       addresses: user.addresses,
+  });
+}));
+
 module.exports = router;
