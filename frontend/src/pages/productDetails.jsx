@@ -15,7 +15,7 @@ export default function ProductDetails() {
 		const fetchProduct = async () => {
 			try {
 				const response = await axios.get(
-					`http://localhost:5173/api/v2/product/product/${id}`
+					`http://localhost:8000/api/v2/product/product/${id}`
 				);
 				console.log("Fetched product:", response.data.product);
 				setProduct(response.data.product); // Ensure correct state setting

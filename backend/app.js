@@ -15,6 +15,7 @@ app.use(bodyParser.urlencoded({ extended: true, limit: "50mb" }));
 
 // Configuration for environment variables
 if (process.env.NODE_ENV !== "PRODUCTION") {
+    // Load environment variables from the .env file if the environment is not production
     require("dotenv").config({
         path: "backend/config/.env",
     });

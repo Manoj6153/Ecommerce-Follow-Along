@@ -162,3 +162,10 @@ Ensure smooth user interaction and feedback after adding to cart.
 Created the Cart Schema: Defined a schema to store cart products linked to users.
 Implemented an API endpoint: Developed a backend route to handle adding products to the cart.
 Stored Cart Data: Successfully saved product details in the database under the user's cart.
+
+----
+
+## Milestone 18: Fetch Products Inside Cart
+Developed an API endpoint: Allowed the frontend to send requests to retrieve cart products.
+Fetched Cart Data: Implemented a query to get products inside the cart for a specific user.
+Tested API Responses: Ensured data retrieval worked seamlessly.
