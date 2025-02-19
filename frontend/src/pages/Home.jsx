@@ -8,7 +8,8 @@ const [loading, setLoading] = useState(true); // For loading state
 const [error, setError] = useState(null); // For error handling
 
 useEffect(() => {
-  fetch("http://localhost:8000/api/v2/product/get-products")
+  fetch("http://localhost:5173/api/v2/product/get-products")
+
     .then((res) => {
       if (!res.ok) {
         throw new Error(`HTTP error! status: ${res.status}`);

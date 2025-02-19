@@ -144,3 +144,21 @@
 - Optimize the layout to be mobile-friendly.
 
 ----
+
+## Milestone 16 - Creating a Product Info Page 🛒
+Create a New Product Info Page
+The page should display detailed information about a product.
+Include product name, image, price, and description.
+Add a Quantity Selector
+Allow users to select the desired quantity of the product.
+Ensure the quantity selection updates dynamically.
+Implement the Add to Cart Button
+Add a button that allows users to add the selected quantity of the product to their cart.
+Ensure smooth user interaction and feedback after adding to cart.
+
+----
+
+## Milestone 17: Add Products to Cart & Store in Database
+Created the Cart Schema: Defined a schema to store cart products linked to users.
+Implemented an API endpoint: Developed a backend route to handle adding products to the cart.
+Stored Cart Data: Successfully saved product details in the database under the user's cart.
