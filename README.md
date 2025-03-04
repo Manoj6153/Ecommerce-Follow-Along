@@ -200,3 +200,16 @@ Fetch and display user data from the backend.
 Show profile photo, name, and email in one section.
 Display addresses in another section with an "Add Address" button.
 If no addresses are available, display "No address found".
+
+----
+
+## Milestone 21 - Address Input Form 🚀
+1. Create the Address Form Page
+Build a React component for the address input form.
+Use controlled inputs to manage form state.
+State to Store Input Address
+2. Use useState to store the form data.
+Update state whenever the user types in the form fields.
+3. Implement Navigation to Address Form
+When clicking Add Address in the Profile page, navigate to the address form page.
+Use React Router for navigation.
