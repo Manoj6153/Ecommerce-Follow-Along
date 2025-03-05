@@ -213,3 +213,9 @@ Update state whenever the user types in the form fields.
 3. Implement Navigation to Address Form
 When clicking Add Address in the Profile page, navigate to the address form page.
 Use React Router for navigation.
+
+## Milestone 22 - Implement Address Storage Endpoint
+1. Create the Endpoint in Express
+- Defined a POST route to handle incoming address data.
+- Extracted the user ID and address from the request body.
+- Updated the user document by adding the new address to the address array.
