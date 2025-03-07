@@ -233,3 +233,15 @@ Use React Router for navigation.
 - Provide an option to select one address.
 3. Backend Endpoint for User Addresses
 - Write a backend API endpoint to fetch all the addresses of the user
+
+----
+
+## Milestone 24: Finalizing the Order Process ✅
+1. Display Ordered Products
+- Show all the products that the user is ordering.
+2. Display Selected Address
+- Show the address chosen by the user for delivery.
+3. Show Cart Total Value
+- Calculate and display the total amount of the cart.
+4. Add Place Order Button
+- At the bottom, provide a Place Order button to confirm the order.
