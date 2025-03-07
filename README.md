@@ -214,8 +214,22 @@ Update state whenever the user types in the form fields.
 When clicking Add Address in the Profile page, navigate to the address form page.
 Use React Router for navigation.
 
+----
+
 ## Milestone 22 - Implement Address Storage Endpoint
 1. Create the Endpoint in Express
 - Defined a POST route to handle incoming address data.
 - Extracted the user ID and address from the request body.
 - Updated the user document by adding the new address to the address array.
+
+----
+
+## Milestone 23: Implementing Place Order Functionality 🛒
+1. Create a Place Order Button
+- Inside the Cart Page, add a Place Order button.
+- When clicked, navigate to the Select Address page.
+2. Create the Select Address Page
+- Display all available addresses of the user.
+- Provide an option to select one address.
+3. Backend Endpoint for User Addresses
+- Write a backend API endpoint to fetch all the addresses of the user
