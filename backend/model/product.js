@@ -14,7 +14,7 @@ const productSchema = new mongoose.Schema(
       required: [true, "Please provide the product category"],
     },
     tags: {
-      type: [String], // Array of tags
+      type: [String],
       default: [],
     },
     price: {
