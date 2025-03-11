@@ -246,8 +246,17 @@ Use React Router for navigation.
 4. Add Place Order Button
 - At the bottom, provide a Place Order button to confirm the order.
 
+----
+
 ## Milestone 25: Creating a End-point to recieve order details
 1. Created an endpoint that will receive the products, user, address details
 - will get the mail of the user using that you need to retrive the _id of the user
 2. For each product the order will be different with same address
 - using order schema it will store order details in mongodb order collection
+
+----
+
+## Milestone 26: Creating a (get)End-point to get order details
+1. Created an endpoint that displays the order details
+2. get the mail of the user to retrive the _id of the user
+- Using that _id it will get all the orders of that user
