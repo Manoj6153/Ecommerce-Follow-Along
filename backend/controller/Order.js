@@ -36,7 +36,7 @@ router.post('/create-order', async (req, res) => {
     }
   });
 
-router.post('/get-orders', async (req, res) => {
+router.get('/get-orders', async (req, res) => {
     try {
         const { email } = req.body;
 
