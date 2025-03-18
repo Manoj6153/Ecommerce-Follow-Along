@@ -268,3 +268,9 @@ Use React Router for navigation.
 - get request to my-orders endpoint that we created in previous milestone.
 - Displayed all the user orders
 - added my-orders page in navbar for better navigation.
+
+----
+
+## Milestone 28: Feature to cancel the placed orders.
+- In my-orders page for every order added cancel order button
+- created an endpoint that will receive the order-id
