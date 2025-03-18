@@ -260,3 +260,11 @@ Use React Router for navigation.
 1. Created an endpoint that displays the order details
 2. get the mail of the user to retrive the _id of the user
 - Using that _id it will get all the orders of that user
+
+----
+
+## Milestone 27: Frontend page for displaying all the orders.
+- created an my-orders page
+- get request to my-orders endpoint that we created in previous milestone.
+- Displayed all the user orders
+- added my-orders page in navbar for better navigation.
