@@ -168,3 +168,15 @@ Stored Cart Data: Successfully saved product details in the database under the u
 ## Milestone 18: Fetch Products Inside Cart
 Developed an API endpoint: Allowed the frontend to send requests to retrieve cart products.
 Fetched Cart Data: Implemented a query to get products inside the cart for a specific user.
+
+----
+
+## Milestone 19:-
+1. reate the Cart Frontend Page
+Design and implement a Cart page in the frontend. Fetch the cart products from the backend and display them. Ensure that the cart layout is user-friendly and responsive.
+
+2. Implement Quantity Controls
+For each product, add + and - buttons to modify the quantity. Update the UI dynamically when the quantity changes. Ensure that the quantity does not go below 1.
+
+3. Develop Backend Endpoints for Quantity Updates
+Create an endpoint to increase the product quantity in the cart. Create an endpoint to decrease the product quantity. Ensure that the backend updates the cart data correctly in the database. Handle edge cases like product quantity limits and stock availability.
