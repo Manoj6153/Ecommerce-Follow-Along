@@ -274,3 +274,7 @@ Use React Router for navigation.
 ## Milestone 28: Feature to cancel the placed orders.
 - In my-orders page for every order added cancel order button
 - created an endpoint that will receive the order-id
+
+## MIlestone 29: Integrating Paypal Payment Gateway.
+- Added radio button for paypal in order conformation page
+- used client id from paypal developer dashbord
