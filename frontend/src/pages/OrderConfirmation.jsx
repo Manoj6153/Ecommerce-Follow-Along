@@ -149,10 +149,6 @@ const OrderConfirmation = () => {
               });
             }}
             onApprove={(data, actions) => {
-              return actions.order.capture().then((details) => {
-                alert(`Transaction completed by ${details.payer.name.given_name}`);
-                placeOrder(true);
-              });
             }}
           />
         </PayPalScriptProvider>
