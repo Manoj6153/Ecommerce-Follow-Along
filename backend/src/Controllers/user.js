@@ -50,6 +50,11 @@ userRouter.post("/login", async(req,res)=>{
         if (err){
             return res.status(400).json({error: "comparing error"});
         }
+        res.cookie("Authorization",token,{
+            expires: new Date(Date.now() + 3600000),
+            httpOnly: true,
+            domain: ".localhost.com"
+        })
         if(!result){
             return res.status(400).json({error: "Invalid credentials"});
         }

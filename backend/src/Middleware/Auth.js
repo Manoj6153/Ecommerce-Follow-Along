@@ -5,8 +5,8 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config(
     {path: "../Config/.env"}
 );
-
 const auth = async(req,res,next)=>{
+    const tokenauth = require.cookie.authorization
     let token;
     if(req.headers.authorization && req.headers.authorization.startsWith("Bearer")){
         token = req.headers.authorization.split(" ")[1];

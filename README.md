@@ -278,3 +278,41 @@ Use React Router for navigation.
 ## MIlestone 29: Integrating Paypal Payment Gateway.
 - Added radio button for paypal in order conformation page
 - used client id from paypal developer dashbord
+
+---
+## Milestone 30: Implementing PayPal Payment Gateway
+- Implemented online payment functionality using the PayPal API.
+- Installed and integrated the react-paypal-js package to handle PayPal transactions.
+- Used PayPalScriptProvider to load PayPal’s payment methods dynamically.
+- Configured PayPal’s client ID for authentication in the sandbox environment.
+- Displayed PayPal payment buttons when the online payment option is selected.
+- Successfully processed test transactions using PayPal’s sandbox mode.
+- Updated the frontend to reflect real-time payment status.
+- Ensured seamless integration for secure and user-friendly transactions.
+ 
+----
+
+## Milestone 31: Implementing Redux for Global State Manageme
+- Implemented global state management using the Redux library.
+- Installed and integrated the react-redux package to manage the global state.
+- Created a store folder with store.js and userActions.js files.
+- Configured the Redux store with a userReducer function to manage the global email state.
+- Defined the setEmail action in userActions.js to update the email in the Redux store.
+- Wrapped the App component inside the Provider in index.js to allow global state access.
+- Ensured seamless integration for managing user email across the application.
+
+----
+
+## Milestone 32: 
+
+- In Login page we will use Dispatch method to store the mail inside global state
+- In all the remaining pages acc the mail stored in global state using useSelector
+
+----
+
+## Milestone 33:
+
+- Download jsonwebtoken package using NPM
+- Use sign method to create an JWT token with mail and ID
+- Give maxAge to set expire time
+- Add the cookie inside the response that helps you to store the cookie inside browser.

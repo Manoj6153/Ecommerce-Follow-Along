@@ -55,7 +55,7 @@ productRouter.post('/post-product',productUpload.array('files'),async (req,res)=
             name:name,
             description:description,
             category:category,
-            tags:tags,
+            tags:tags,    
             price:price,
             stock:stock,
             email:email,
