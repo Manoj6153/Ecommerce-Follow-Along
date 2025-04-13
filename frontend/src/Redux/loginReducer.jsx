@@ -1,36 +1,18 @@
-const initState = {
-    email: null,
-    password: null,
-    loginSuccessful: false,
-    loginError: null,
-    loginAttempts: 0
-};
-
-export const loginReducer = (state = initState, action) => {
-    switch (action.type) {
-        case 'LOGIN':
-            return {
-                ...state,
-                email: action.payload.email,
-                password: action.payload.password,
-                loginSuccessful: true,
-                loginError: null,
-                loginAttempts: state.loginAttempts + 1
-            };
-        case 'LOGIN_SUCCESSFUL':
-            return {
-                ...state,
-                loginSuccessful: true,
-                loginError: null
-            };
-        case 'LOGIN_FAILURE':
-            return {
-                ...state,
-                loginSuccessful: false,
-                loginError: action.payload.error,
-                loginAttempts: state.loginAttempts + 1
-            };
-        default:
-            return state;
-    }
-};
+import { LOGIN_FAILURE, LOGIN_SUCCESS, LOGOUT } from "./actiontype";
+ 
+ const initstate={
+     email:null,
+     password:null
+ }
+ export const userReducer = (state = initstate, action) => {
+     switch (action.type) {
+       case LOGIN_SUCCESS:
+         return { ...state, user: action.payload, error: null };
+       case LOGIN_FAILURE:
+         return { ...state, user: null, error: action.payload };
+       case LOGOUT:
+         return { ...state, user: null };
+       default:
+         return state;
+     }
+   };

@@ -1,45 +1,63 @@
 import React,{useEffect,useState} from 'react';
 import PropTypes from 'prop-types';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 
 
 export default function ProductCard({product}) {
-
-    useEffect(()=>{
-        document.body.style.backgroundColor='azure'
-      })
+    const navigate=useNavigate()
     
       
     const [imgIndex,setImgIndex] = useState(0);
 
     useEffect(() => {
+        if (product.images.length <= 1) return;
         const interval = setInterval(() => {
             setImgIndex((prev) => {
                 console.log(prev + 1);
-                return (prev + 1)%(product.image.length-1) ;
+                return (prev + 1)%(product.images.length-1) ;
             });
         }, 2000);
     
-        return () => clearInterval(interval); // Cleanup when unmounting
+        return () => clearInterval(interval);
     }, [imgIndex]);
 
+    const handleCart=(id)=>{
+        if (!localStorage.getItem("token")){
+            alert('Please login to add product to cart')
+            navigate('/login')
+            return;
+        }
+        axios.patch('http://localhost:3000/product/cart',{id:id,quantity:1},{headers:{"Authorization":localStorage.getItem("token")}}).then((res)=>{
+            console.log(res);
+            alert('Product added to cart')
+        }).catch((err)=>{
+            console.log(err);
+        })
+    }
     
 
     return (
-        <div className='m-8'>
-            <div className='flex flex-col text-white'>
+        <div className='place-items-center justify-center bg-white p-4 rounded-lg shadow-lg w-72'>
+            <div className='flex flex-col text-black'>
                 
-                <img src={product.image[imgIndex]} alt="" className='h-[40vh] w-[40vw]' />
-                <h2 className='text-white'>{product.name}</h2>
-                <h4>
+            <img 
+    src={`http://localhost:3000/${product.images[imgIndex].replace(/\\/g, "/")}`} 
+    alt={product.name} 
+    className="h-48 w-48 object-cover rounded-lg mb-2"
+/>
+<hr className='w-52'></hr>
+                <h2 className='text-black font-bold'>{product.name}</h2>
+                <h4 className='font-semibold'>
                     {product.description}
                 </h4>
             </div>
             <div>
-                <h2 className='text-white'>
+                <h2 className='text-black font-semibold'>
                     ${product.price}
                 </h2>
-                <button>Buy Now</button>
+                <button onClick={()=>handleCart(product._id)} className='text-white'>Add to Cart</button>
             </div>
             
         </div>
@@ -48,9 +66,10 @@ export default function ProductCard({product}) {
 
 ProductCard.propTypes = { 
     product: PropTypes.shape({
+        _id: PropTypes.string.isRequired,
         name: PropTypes.string.isRequired,
         price: PropTypes.number.isRequired,
         description: PropTypes.string.isRequired,
-        image: PropTypes.array.isRequired,
+        images: PropTypes.array.isRequired,
     }).isRequired,
 };

@@ -317,6 +317,8 @@ Use React Router for navigation.
 - Give maxAge to set expire time
 - Add the cookie inside the response that helps you to store the cookie inside browser.
 
+----
+
 ## Milestone 34:
 
 - Got the token from the browser cookie and sent it to the server

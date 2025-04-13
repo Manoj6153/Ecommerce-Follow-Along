@@ -2,6 +2,7 @@ const {Router}=require('express');
 const auth = require('../Middleware/auth');
 const user=require("../Model/userModel");
 const orders = require('../Model/orderModel');
+const rolemiddleware = require('../Middleware/role');
 const orderrouter=Router()
 
 orderrouter.post('/place',auth,async(req,res)=>{
@@ -28,18 +29,29 @@ orderrouter.post('/place',auth,async(req,res)=>{
         }
 
         // Create separate orders for each order item
+        const totalAmount = orderItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+ 
+        const paymentData = {
+          intent: "sale",
+          payer: { payment_method: "paypal" },
+          transactions: [{ amount: { total: totalAmount.toFixed(2), currency: "INR" } }],
+          redirect_urls: { return_url: "http://localhost:3000/success", cancel_url: "http://localhost:3000/cancel" },
+        };
+
+        paypal.payment.create(paymentData,async(error,payment)=>{
         const orderPromises = orderItems.map(async (item) => {
-            const totalAmount = item.price * item.quantity;
-            const order = new orders ({
-                user: user._id,
-                orderItems: [item], // Each order contains a single item
-                shippingAddress:shippingAddress,
-                totalAmount:totalAmount,
-            });
-            return order.save();
+        const order = new orders ({
+            user: user._id,
+            orderItems: [item], // Each order contains a single item
+            shippingAddress,
+            totalAmount,
+            paymentID:payment.id
         });
 
-        const orders = await Promise.all(orderPromises);
+        return order.save();
+    });
+    const orders = await Promise.all(orderPromises);
+})
 
         
       
@@ -69,18 +81,23 @@ orderrouter.get("/getorder",auth,async(req,res)=>{
     }
 })
 
-
-orderrouter.patch('/cancelorder/:orderId', async (req, res) => {
+orderrouter.patch('/cancel-order/:orderId',auth,rolemiddleware(['user']), async (req, res) => {
     try {
         const { orderId } = req.params;
-        console.log("fff")
-        const order = await Order.findById(orderId);
+       
+        // Find the order by ID
+        const order = await orders.findById(orderId);
         console.log(order);
         if (!order) {
             return res.status(404).json({ message: 'Order not found.' });
         }
 
-        order.orderStatus = 'Cancelled';
+        // Update order status to 'cancelled'
+        if(order.orderStatus==['Delivered']){
+            res.status(404).json({ message: 'Order is already delivered'});
+        }
+
+        order.orderStatus = ['Cancelled'];
         await order.save();
 
         res.status(200).json({ message: 'Order cancelled successfully.', order });
@@ -90,4 +107,19 @@ orderrouter.patch('/cancelorder/:orderId', async (req, res) => {
     }
 });
 
-module.exports=orderrouter;
+orderrouter.post('/verify-payment',auth,async(req,res)=>{
+    const {orderId}=req.user
+
+    paypal.payment.get(orderId,async(error,payment)=>{
+        if(error){
+            res.status(500).json({message:"there is error"})
+        }
+        if(payment.state!=="approved"){
+            res.status(500).json({message:"cancel payment"})
+        }
+        await orders.findByIdAndUpdate(orderId,{orderStatus:'Paid'})  
+    })
+
+})
+
+module.exports=orderrouter

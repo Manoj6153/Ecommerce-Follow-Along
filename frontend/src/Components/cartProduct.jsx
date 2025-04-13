@@ -1,43 +1,46 @@
+import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { IoIosAddCircleOutline } from "react-icons/io";
-import {MdOutlineRemoveCircleOutline } from "react-icons/md";
-export default function CartProduct({ _id, name, images, quantity, price }) {
-	const [currentIndex, setCurrentIndex] = useState(0);
-	const [quantityVal, setQuantityVal] = useState(quantity);
-	useEffect(() => {
-		if (!images || images.length === 0) return;
-		const interval = setInterval(() => {
-			setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
-		}, 2000);
-		return () => clearInterval(interval);
-	}, [images]);
-	const handleIncrement = () => {
-		const newquantityVal = quantityVal + 1;
-        setQuantityVal(newquantityVal);
-        updateQuantityVal(newquantityVal);
-	};
-	const handleDecrement = () => {
-        const newquantityVal = quantityVal > 1 ? quantityVal - 1 : 1;
-		setQuantityVal(newquantityVal);
-        updateQuantityVal(newquantityVal);
-	};
+import { MdOutlineRemoveCircleOutline } from "react-icons/md";
+
+export default function CartProduct({ productId, productImages, productName, quantity, price }) {
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const [quantityVal, setQuantityVal] = useState(quantity);
+
+    const handleIncrement = () => {
+        const newQuantityVal = quantityVal + 1;
+        setQuantityVal(newQuantityVal);
+        updateQuantityVal(newQuantityVal);
+    };
+
+    const handleDecrement = () => {
+        const newQuantityVal = quantityVal > 1 ? quantityVal - 1 : 1;
+        setQuantityVal(newQuantityVal);
+        updateQuantityVal(newQuantityVal);
+    };
+
+    useEffect(() => {
+        if (productImages.length <= 1) return;
+
+        const interval = setInterval(() => {
+            setCurrentIndex((prev) => {
+                return (prev + 1) % productImages.length;
+            });
+        }, 3000); // Adjusted timing for a smoother transition
+
+        return () => clearInterval(interval);
+    }, [currentIndex, productImages.length]);
+
     const updateQuantityVal = (quantity) => {
-        fetch('http://localhost:3000/', {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                email: '',
-                productId: _id,
-                quantity,
-            }),
-        })
+        axios.patch('http://localhost:3000/product/cart', {
+            id: productId,
+            quantity: quantity,
+        }, { headers: { "Authorization": localStorage.getItem("token") } })
             .then((res) => {
-                if (!res.ok) {
+                if (res.status !== 200) {
                     throw new Error(`HTTP error! status: ${res.status}`);
                 }
-                return res.json();
+                return res.data;
             })
             .then((data) => {
                 console.log('quantityVal updated:', data);
@@ -46,56 +49,45 @@ export default function CartProduct({ _id, name, images, quantity, price }) {
                 console.error('Error updating quantityVal:', err);
             });
     };
-	const currentImage = images && images.length > 0 ? images[currentIndex] : null;
-	
-	return (
-        <div className="h-max w-full p-4 flex justify-between border-b border-neutral-300 bg-neutral-100 rounded-lg">
-            <div className="flex flex-col gap-y-2">
-                <img
-                    src={currentImage} // Ensure the URL is correct\
-                    alt={name}
-                    className="w-32 h-32 object-cover rounded-lg border border-neutral-300"
-                />
-                <div className="flex flex-row items-center gap-x-2 md:hidden">
-                    <div
-                        onClick={handleIncrement}
-                        className="flex justify-center items-center bg-gray-200 hover:bg-gray-300 active:translate-y-1 p-2 rounded-xl cursor-pointer"
-                    >
-                        <IoIosAddCircleOutline />
+
+    return (
+        <div className="w-full p-4 flex justify-between border-b border-neutral-300 bg-blue-100 rounded-lg text-black">
+            <div className="flex flex-col gap-y-2 md:flex-row md:items-center md:gap-x-4">
+                {/* Image carousel */}
+                <div className="w-24 h-24 md:w-64 md:h-40 bg-gray-200 rounded-lg overflow-hidden">
+                    <img
+                        src={`http://localhost:3000/${productImages[currentIndex].replace(/\\/g, "/")}`}
+                        alt={productName}
+                        className="object-cover w-full h-full"
+                    />
+                </div>
+
+                <div className="flex flex-col md:flex-row md:items-center w-full justify-between">
+                    <div className="flex flex-col justify-start md:ml-4">
+                        <p className="text-xl font-semibold text-gray-800">{productName}</p>
+                        <p className="text-lg text-gray-600">${price * quantityVal}</p>
                     </div>
-                    <div className="px-5 py-1 text-center bg-gray-100 rounded-xl pointer-events-none">
-                        {quantityVal}
-                    </div>
-                    <div
-                        onClick={handleDecrement}
-                        className="flex justify-center items-center bg-gray-200 hover:bg-gray-300 active:translate-y-1 p-2 rounded-xl cursor-pointer"
-                    >
-                        <MdOutlineRemoveCircleOutline/>
+
+                    {/* Quantity Control */}
+                    <div className="flex items-center gap-x-2 mt-2 md:mt-0">
+                        <div
+                            onClick={handleDecrement}
+                            className="flex justify-center items-center bg-blue-200 hover:bg-gray-300 active:translate-y-1 p-2 rounded-xl cursor-pointer"
+                        >
+                            <MdOutlineRemoveCircleOutline size={24} />
+                        </div>
+                        <div className="px-5 py-1 text-center bg-gray-100 rounded-xl pointer-events-none">
+                            {quantityVal}
+                        </div>
+                        <div
+                            onClick={handleIncrement}
+                            className="flex justify-center items-center bg-blue-200 hover:bg-gray-300 active:translate-y-1 p-2 rounded-xl cursor-pointer"
+                        >
+                            <IoIosAddCircleOutline size={24} />
+                        </div>
                     </div>
                 </div>
             </div>
-            <div className="w-full flex flex-col justify-start items-start md:flex-row md:justify-between md:items-center px-4">
-                <p className="text-lg font-semibold">{name}</p>
-                <p className="text-lg font-semibold">${price*quantityVal}</p>
-                <div className="hidden md:flex flex-row items-center gap-x-2 ">
-                    <div
-                        onClick={handleIncrement}
-                        className="flex justify-center items-center bg-gray-200 hover:bg-gray-300 active:translate-y-1 p-2 rounded-xl cursor-pointer"
-                    >
-                        <IoIosAddCircleOutline  />
-                    </div>
-                    <div className="px-5 py-1 text-center bg-gray-100 rounded-xl pointer-events-none">
-                        {quantityVal}
-                    </div>
-                    <div
-                        onClick={handleDecrement}
-                        className="flex justify-center items-center bg-gray-200 hover:bg-gray-300 active:translate-y-1 p-2 rounded-xl cursor-pointer"
-                    >
-                        < MdOutlineRemoveCircleOutline/>
-                    </div>
-                </div>
-            </div>
-            
         </div>
     );
 }

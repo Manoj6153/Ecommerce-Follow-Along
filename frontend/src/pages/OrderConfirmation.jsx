@@ -1,165 +1,117 @@
-import React, { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 
 const OrderConfirmation = () => {
-  const [cartItems, setCartItems] = useState([]);
-  const [selectedAddress, setSelectedAddress] = useState(null);
-  const [totalPrice, setTotalPrice] = useState(0);
-  const [loading, setLoading] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState("COD");
+  const location = useLocation();
   const navigate = useNavigate();
 
+  const selectedAddress = location.state?.selectedAddress;
+  const [cart, setCart] = useState([]);
+  const [total, setTotal] = useState(0);
+
   useEffect(() => {
-    const fetchCartItems = async () => {
-      try {
-        const response = await axios.get("/api/cart");
-        setCartItems(response.data);
-        setTotalPrice(
-          response.data.reduce((acc, item) => acc + item.price * item.quantity, 0)
-        );
-      } catch (error) {
-        console.error("Error fetching cart:", error);
-      }
-    };
-
-    const fetchAddress = async () => {
-      try {
-        const response = await axios.get("/api/user/address");
-        setSelectedAddress(response.data);
-      } catch (error) {
-        console.error("Error fetching address:", error);
-      }
-    };
-
-    fetchCartItems();
-    fetchAddress();
+    axios
+      .get("http://localhost:3000/product/getcart", {
+        headers: { Authorization: localStorage.getItem("token") },
+      })
+      .then((res) => {
+        setCart(res.data.cart);
+      })
+      .catch((err) => {
+        console.error("Error fetching cart:", err);
+      });
   }, []);
 
-  const placeOrder = async (isPaid = false) => {
-    if (!selectedAddress) {
-      alert("Please select a delivery address before placing an order.");
-      return;
-    }
+  useEffect(() => {
+    const totalPrice = cart.reduce(
+      (acc, item) => acc + item.price * item.quantity,
+      0
+    );
+    setTotal(totalPrice);
+  }, [cart]);
 
-    setLoading(true);
-    try {
-      const userEmail = "user@example.com";
-
-      const orderData = {
-        products: cartItems.map((item) => ({
-          productId: item.id,
-          quantity: item.quantity,
-        })),
-        totalPrice,
-        address: selectedAddress,
-        userEmail,
-        paymentMethod,
-        isPaid,
-      };
-
-      const response = await axios.post("/api/orders", orderData);
-
-      if (response.status === 201) {
-        alert("Order placed successfully!");
-        navigate("/my-orders");
-      }
-    } catch (error) {
-      console.error("Error placing order:", error);
-      alert("Failed to place order. Please try again.");
-    } finally {
-      setLoading(false);
-    }
+  const onSuccess = () => {
+    alert("Payment successful! Redirecting to orders page...");
+    navigate("/my-orders");
   };
 
+  if (!selectedAddress) {
+    return (
+      <div className="text-center mt-10 text-red-500 text-lg">
+        No address selected. Please go back and select an address.
+      </div>
+    );
+  }
+
   return (
-    <div className="order-confirmation">
-      <h2>Order Confirmation</h2>
+    <>
+      {cart.length > 0 ? (
+        <div className="max-w-3xl mx-auto p-4 bg-white rounded shadow">
+          <h2 className="text-2xl font-semibold mb-4">Selected Address</h2>
+          <div className="mb-6 text-gray-800 space-y-1">
+            <p>{selectedAddress.address1}, {selectedAddress.address2}</p>
+            <p>{selectedAddress.city}, {selectedAddress.country} - {selectedAddress.zipCode}</p>
+          </div>
 
-      <div className="order-items">
-        <h3>Ordered Products</h3>
-        {cartItems.length > 0 ? (
-          cartItems.map((item) => (
-            <div key={item.id} className="order-item">
-              <p>
-                {item.name} - {item.quantity} x ₹{item.price}
-              </p>
+          <h2 className="text-2xl font-semibold mb-4">Cart Items</h2>
+          {cart.map((product) => (
+            <div
+              key={product.productId}
+              className="border border-gray-300 p-4 mb-3 rounded"
+            >
+              <h3 className="text-lg font-medium">{product.productName}</h3>
+              <p>Price: ${product.price}</p>
+              <p>Quantity: {product.quantity}</p>
             </div>
-          ))
-        ) : (
-          <p>No items in the cart.</p>
-        )}
-      </div>
+          ))}
 
-      <div className="order-address">
-        <h3>Delivery Address</h3>
-        {selectedAddress ? (
-          <p>
-            {selectedAddress.street}, {selectedAddress.city},{" "}
-            {selectedAddress.pincode}
-          </p>
-        ) : (
-          <p>Loading address...</p>
-        )}
-      </div>
+          <div className="mt-6">
+            <h2 className="text-xl font-semibold">Total: ${total.toFixed(2)}</h2>
+          </div>
 
-      <div className="order-total">
-        <h3>Total Price: ₹{totalPrice}</h3>
-      </div>
+          <div className="mt-8">
+            <PayPalScriptProvider options={{ clientId: "AW78-TcxiCBodENWIJtudObD6al4SGS-CKaVm-qFghtbiLZz9jMfzA7W5Nf3loR8tflCjBPnpRicDyQk" }}>
+              <PayPalButtons
+                style={{ layout: "horizontal" }}
+                createOrder={(data, actions) => {
+                  return actions.order.create({
+                    purchase_units: [{ amount: { value: total.toFixed(2) } }],
+                  });
+                }}
+                onApprove={async (data, actions) => {
+                  try {
+                    const order = await actions.order.capture();
+                    const response = await axios.post(
+                      "http://localhost:3000/order/verify-payment",
+                      { orderId: order.id },
+                      {
+                        headers: {
+                          Authorization: localStorage.getItem("token"),
+                        },
+                      }
+                    );
 
-      <div className="payment-method">
-        <h3>Select Payment Method:</h3>
-        <label>
-          <input
-            type="radio"
-            name="payment"
-            value="COD"
-            checked={paymentMethod === "COD"}
-            onChange={() => setPaymentMethod("COD")}
-          />
-          Cash on Delivery (COD)
-        </label>
-
-        <label>
-          <input
-            type="radio"
-            name="payment"
-            value="PayPal"
-            checked={paymentMethod === "PayPal"}
-            onChange={() => setPaymentMethod("PayPal")}
-          />
-          Pay with PayPal
-        </label>
-      </div>
-
-      {paymentMethod === "PayPal" && (
-        <PayPalScriptProvider options={{ clientId: "AW78-TcxiCBodENWIJtudObD6al4SGS-CKaVm-qFghtbiLZz9jMfzA7W5Nf3loR8tflCjBPnpRicDyQk" }}>
-          <PayPalButtons
-            style={{ layout: "horizontal" }}
-            createOrder={(data, actions) => {
-              return actions.order.create({
-                purchase_units: [
-                  {
-                    amount: {
-                      value: totalPrice.toFixed(2),
-                    },
-                  },
-                ],
-              });
-            }}
-            onApprove={(data, actions) => {
-            }}
-          />
-        </PayPalScriptProvider>
+                    if (response.data.success) {
+                      onSuccess();
+                    } else {
+                      alert("Payment verification failed.");
+                    }
+                  } catch (err) {
+                    console.error("Payment error:", err);
+                    alert("Error processing payment. Please try again.");
+                  }
+                }}
+              />
+            </PayPalScriptProvider>
+          </div>
+        </div>
+      ) : (
+        <div className="text-center text-lg text-gray-500 mt-10">Cart is empty</div>
       )}
-
-      {paymentMethod === "COD" && (
-        <button onClick={() => placeOrder(false)} className="place-order-btn" disabled={loading}>
-          {loading ? "Placing Order..." : "Place Order (COD)"}
-        </button>
-      )}
-    </div>
+    </>
   );
 };
 

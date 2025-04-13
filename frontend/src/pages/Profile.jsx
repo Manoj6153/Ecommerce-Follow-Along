@@ -1,87 +1,95 @@
-import { useEffect,useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import NavBar from "../Components/navbar";
 
-function Profile(){
-    const [data,setData]=useState({});
-    const navigate = useNavigate();
-    useEffect(() => {
-        document.getElementsByTagName('body')[0].style.backgroundColor="wheat";
-    }, []);
-    // Examples of addresses
-    const addresses = [
-        {
-            addressType: "Home",
-            address1: "123 Main St",
-            address2: "Apt 4B",
-            city: "New York",
-            country: "USA",
-            zipCode: "10001"
-        },
-        {
-            addressType: "Work",
-            address1: "456 Corporate Blvd",
-            address2: "Suite 800",
-            city: "San Francisco",
-            country: "USA",
-            zipCode: "94105"
-        },
-        {
-            addressType: "Parents' House",
-            address1: "789 Oak Lane",
-            address2: "",
-            city: "Chicago",
-            country: "USA",
-            zipCode: "60614"
-        }
-    ];
-    // axios.get("http://localhost:3000/get-user", {email: email})
-    // .then(response => {
-    //     setData(response.data);
-    // })
-    const handleAddress = () => {
-        navigate("/add-address",{state: {email: "niranjan.r.s67@kalvium.community"}});
-    }
+function Profile() {
+  const [user, setUser] = useState(null);
+  const navigate = useNavigate();
 
-    
-    
-    return(
-        <div className="text-black">
-            <div className="flex flex-row  justify-start" style={{gap: "2rem"}}>
-                <div className="profile-img">
-                    
-                </div>
-                <div className="profile-info">
-                    <h2>Niranjan</h2>
-                    <h3>niranjan.r.s67@kalvium.community</h3>
-                </div>
-            </div>
-            <br />
-            {(addresses.length > 0) && (
-            <div className="flex flex-row gap-x-8 p-8 align-middle shadow-md" style={{gap: "2rem"}}>
-                {addresses.map((address, index) => (
-                    <div key={index}>
-                        <h3>{address.addressType}</h3>
-                        <p>{address.address1}</p>
-                        <p>{address.address2}</p>
-                        <p>{address.city}</p>
-                        <p>{address.country}</p>
-                        <p>{address.zipCode}</p>
-                    </div>))}
-                    <button onClick={()=>handleAddress()} className="text-white">Add Address</button>
-            </div>)
-}
-{(!addresses) && (
-            <div className="flex flex-row gap-x-8 p-8 align-middle shadow-md" style={{gap: "2rem"}}>
-                <div>
-                    <h3>No Address Found</h3>
-                </div>
-                <button onClick={()=>handleAddress()} className="text-white">Add Address</button>
-                
-            </div>)
-}
-        </div>
+  useEffect(() => {
+    axios
+      .get("http://localhost:3000/auth/get-user", {
+        headers: { Authorization: localStorage.getItem("token") },
+      })
+      .then((response) => {
+        console.log(response.data);
+        setUser(response.data.user);
+      })
+      .catch((error) => {
+        console.error("Failed to fetch user:", error);
+      });
+  }, []);
+
+  const handleAddress = () => {
+    navigate("/add-address");
+  };
+
+  if (!user) {
+    return (
+      <div className="flex items-center justify-center h-screen text-xl text-gray-700">
+        Loading Profile...
+      </div>
     );
+  }
+
+  return (
+    <div className="min-h-64  text-gray-800 rounded-xl">
+      <NavBar />
+      <div className="max-w-5xl mx-auto py-12 px-4 bg-white rounded-xl">
+        {/* Profile Header */}
+        <div className="bg-blue-100 rounded-xl shadow-md p-6 flex items-center space-x-6">
+          <img
+            className="w-24 h-24 rounded-full object-cover border"
+            src={`http://localhost:3000${user.avatar?.url.replace(/\\/g, "/")}`}
+            alt="User Avatar"
+          />
+          <div>
+            <h2 className="text-2xl font-bold">{user.name}</h2>
+            <p className="text-gray-600">{user.email}</p>
+          </div>
+        </div>
+
+        {/* Address Section */}
+        <div className="mt-10">
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="text-xl font-semibold">Your Addresses</h3>
+            <button
+              onClick={handleAddress}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition"
+            >
+              Add Address
+            </button>
+          </div>
+
+          {user.addresses && user.addresses.length > 0 ? (
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {user.addresses.map((address, index) => (
+                <div
+                  key={index}
+                  className="bg-blue-100 shadow rounded-lg p-4 border-l-4 border-blue-500"
+                >
+                  <h4 className="font-semibold text-lg mb-1">
+                    {address.addressType}
+                  </h4>
+                  <p className="text-sm">{address.address1}</p>
+                  <p className="text-sm">{address.address2}</p>
+                  <p className="text-sm">
+                    {address.city}, {address.country}
+                  </p>
+                  <p className="text-sm">Zip: {address.zipCode}</p>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="bg-white shadow rounded-lg p-6 text-center">
+              <p>No address found.</p>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default Profile;

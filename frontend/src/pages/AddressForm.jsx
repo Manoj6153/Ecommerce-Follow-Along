@@ -1,71 +1,103 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import NavBar from "../Components/navbar";
-import {useNavigate,useLocation} from 'react-router-dom'; 
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const AddressForm = () => {
-    const [address, setAddress] = useState({address1: "", address2: "", city: "", country: "", zipCode: "",addressType: ""})
-    const navigate = useNavigate();
-    const location = useLocation();
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        const addressData = {
-            address:address,
-            email: location.state.email,
-        };
+  const [address, setAddress] = useState({
+    address1: "",
+    address2: "",
+    city: "",
+    country: "",
+    zipCode: "",
+    addressType: "",
+  });
 
-        try {
-            const response = await axios.post(
-                "http://localhost:3000/add-address",
-                addressData,
-                { headers: { "Content-Type": "application/json" } }
-            );
-            if (response.status === 201) {
-                alert("Address added successfully!");
-                navigate("/profile");
-            }
-        } catch (err) {
-            console.error("Error adding address:", err);
-            alert("Failed to add address. Please check the data and try again.");
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.post(
+        "http://localhost:3000/auth/add-address",
+        address,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token || "",
+          },
         }
-    };
+      );
+      if (response.status === 201) {
+        alert("Address added successfully!");
+        navigate("/profile");
+      }
+    } catch (err) {
+      console.error("Error adding address:", err);
+      alert("Failed to add address. Please check the data and try again.");
+    }
+  };
 
-    return (
-        <>
-        <NavBar />
-        <div className="address-form bg-white p-4 rounded-md text-left text-black w-[350px]">
-            <form className="flex flex-col gap-2">
-                <div>
-                    <label className="p-4" htmlFor="address1">Address 1</label><br />
-                    <input type="text" id="address1" placeholder="Enter address 1" className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-white focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 bg-white" value={address.address1} onChange={(e) => setAddress({...address, address1: e.target.value})}/>
-                </div>
-                <div>
-                    <label htmlFor="address2">Address 2</label><br />
-                    <input type="text" id="address2" placeholder="Enter address 2" className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-white focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 bg-white" value={address.address2} onChange={(e) => setAddress({...address, address2: e.target.value})}/>
-                </div>
-                <div>
-                    <label htmlFor="city">City</label><br />
-                    <input type="text" id="city" placeholder="Enter city" className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-white focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 bg-white" value={address.city} onChange={(e) => setAddress({...address, city: e.target.value})}/>
-                </div>
-                <div>
-                    <label htmlFor="country">Country</label><br />
-                    <input type="text" id="country" placeholder="Enter country" className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-white focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 bg-white" value={address.country} onChange={(e) => setAddress({...address, country: e.target.value})}/>
-                </div>
-                <div>
-                    <label htmlFor="zipCode">Zip Code</label><br />
-                    <input type="text" id="zipCode" placeholder="Enter zip code" className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-white focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 bg-white" value={address.zipCode} onChange={(e) => setAddress({...address, zipCode: e.target.value})}/>
-                </div>
-                <div>
-                    <label htmlFor="addressType">Address Type</label><br />
-                    <input type="text" id="addressType" placeholder="Home/Office" className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-white focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 bg-white" value={address.addressType} onChange={(e) => setAddress({...address, addressType: e.target.value})}/>
-                </div>
-                <br />
-                <button type="submit" className="bg-emerald-800 text-white px-4 py-2 rounded-md hover:bg-emerald-700 transition" onClick={(e)=>handleSubmit(e)}>Save</button>
-            </form>
+  return (
+    <>
+      <NavBar />
+      <div className="flex justify-center items-center min-h-screen  text-black w-96">
+        <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-md">
+          <h1 className="text-xl font-semibold mb-4 text-center">Add Your Address</h1>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {[
+              { id: "address1", label: "Address Line 1", placeholder: "Enter address line 1" },
+              { id: "address2", label: "Address Line 2", placeholder: "Enter address line 2" },
+              { id: "city", label: "City", placeholder: "Enter city" },
+              { id: "country", label: "Country", placeholder: "Enter country" },
+              { id: "zipCode", label: "Zip Code", placeholder: "Enter zip code" },
+            ].map(({ id, label, placeholder }) => (
+              <div key={id}>
+                <label htmlFor={id} className="block text-sm font-medium text-gray-700">
+                  {label}
+                </label>
+                <input
+                  id={id}
+                  type="text"
+                  placeholder={placeholder}
+                  value={address[id]}
+                  onChange={(e) => setAddress({ ...address, [id]: e.target.value })}
+                  className="mt-1 block w-full border border-gray-300 rounded-md p-2 text-sm"
+                  required={id !== "address2"} // address2 is optional
+                />
+              </div>
+            ))}
+
+            <div>
+              <label htmlFor="addressType" className="block text-sm font-medium text-gray-700">
+                Address Type
+              </label>
+              <select
+                id="addressType"
+                value={address.addressType}
+                onChange={(e) => setAddress({ ...address, addressType: e.target.value })}
+                className="mt-1 block w-full border border-gray-300 rounded-md p-2 text-sm bg-white"
+                required
+              >
+                <option value="">Select address type</option>
+                <option value="Home">Home</option>
+                <option value="Office">Office</option>
+              </select>
+            </div>
+
+            <button
+              type="submit"
+              className="w-full bg-emerald-800 hover:bg-emerald-700 text-white font-semibold py-2 px-4 rounded-md transition mt-2"
+            >
+              Save Address
+            </button>
+          </form>
         </div>
-        </>
-    )
-
-}
+      </div>
+    </>
+  );
+};
 
 export default AddressForm;

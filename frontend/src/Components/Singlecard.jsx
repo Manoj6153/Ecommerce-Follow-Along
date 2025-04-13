@@ -23,7 +23,7 @@ const handleIncrement=()=>{
                     `http://localhost:3000/product/${id}`
                 );
                 console.log("Fetched product:", response.data.product);
-                setproduct(response.data.product); // Ensure correct state setting
+                setproduct(response.data.product);
                 setLoading(false);
             } catch (err) {
                 console.error("Error fetching product:", err);
