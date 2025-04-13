@@ -1,70 +1,101 @@
-import { useEffect, useState } from "react";
-import MyProduct from "../Components/MyProduct";
-import NavBar from "../Components/navbar";
-import axios from "axios";
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
-export default function MyProducts() {
-    const [products, setProducts] = useState([]);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
-    const email = ""
+function MyProduct({ _id, name, images, description, price, onDelete }) {
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const [isDeleting, setIsDeleting] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
-        console.log(localStorage.getItem("token"))
-        if (localStorage.getItem("token")){axios.get(`http://localhost:3000/product/get-my-products`,{headers:{"Authorization":localStorage.getItem("token")}})
-            .then((res) => {
-                if (res.status !== 200) {
-                    throw new Error(`HTTP error! status: ${res.status}`);
-                } 
-                return res.data;
-            })
-            .then((data) => {
-                setProducts(data.products);
-                setLoading(false);
+        if (!images || images.length === 0) return;
+        const interval = setInterval(() => {
+            setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
+        }, 2000);
+        return () => clearInterval(interval);
+    }, [images]);
+
+    const currentImage = images && images.length > 0 ? images[currentIndex] : null;
+
+    const handleEdit = () => {
+        navigate(`/edit-product/${_id}`);
+    };
+
+    const handleDelete = async () => {
+        // Confirm before deleting
+        if (!window.confirm("Are you sure you want to delete this product?")) {
+            return;
+        }
+        
+        try {
+            setIsDeleting(true);
+            
+            const response = await axios.delete(
+                `http://localhost:3000/product/delete-product/${_id}`
+            );
+            
+            if (response.status === 200) {
+                alert("Product deleted successfully!");
                 
-            })
-            .catch((err) => {
-                console.error("Error fetching products:", err);
-                setError(err.message);
-                setLoading(false);
-            });}
-    }, [email]);
+                if (typeof onDelete === 'function') {
+                    onDelete(_id);
+                } else {
+                    window.location.reload();
+                }
+            }
+        } catch (err) {
+            console.error("Error deleting product:", err);
+            
+            if (err.response && err.response.data && err.response.data.message) {
+                alert(`Failed to delete product: ${err.response.data.message}`);
+            } else {
+                alert("Failed to delete product. Please try again later.");
+            }
+        } finally {
+            setIsDeleting(false);
+        }
+    };
 
-    if (loading) {
-        return <div className="text-center text-black mt-10">Loading products...</div>;
-    }
+    const formattedPrice = typeof price === 'number' ? price.toFixed(2) : price;
 
-    if (error) {
-        return <div className="text-center text-red-500 mt-10">Error: {error}</div>;
-    }
-
-
-    if (!localStorage.getItem("token")) {
-        return (
-          <div className="text-center mt-10">
-            <button
-              className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded"
-              onClick={() => window.location.replace("/login")}
-            >
-              Login
-            </button>
-          </div>
-        );
-      }
-      
-      return (
+    return (
         <>
-          <NavBar />
-          <div className="w-full min-h-screen bg-neutral-800">
-            <h1 className="text-3xl text-center text-black py-6 font-bold">My products</h1>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 p-4">
-              {products && products.map((product) => (
-                <MyProduct key={product._id} {...product} />
-              ))}
-              {!products && <div className="text-center text-white">No products found</div>}
+            <div className="bg-white p-4 rounded-lg shadow-md flex flex-col justify-between">
+                <div className="w-full">
+                    {currentImage ? (
+                        <img
+                            src={`http://localhost:3000${currentImage}`}
+                            alt={name}
+                            className="w-full h-56 object-cover rounded-lg mb-2"
+                        />
+                    ) : (
+                        <div className="w-full h-56 bg-gray-200 flex items-center justify-center rounded-lg mb-2">
+                            <span className="text-gray-500">No image available</span>
+                        </div>
+                    )}
+                    <h2 className="text-lg font-bold">{name}</h2>
+                    <p className="text-sm opacity-75 mt-2">{description}</p>
+                </div>
+                <div className="w-full mt-4">
+                    <p className="text-lg font-bold my-2">${formattedPrice}</p>
+                    <button
+                        className="w-full text-white px-4 py-2 rounded-md bg-neutral-900 hover:bg-neutral-700 transition duration-300"
+                        onClick={handleEdit}
+                    >
+                        Edit
+                    </button>
+                    <button
+                        onClick={handleDelete}
+                        disabled={isDeleting}
+                        className="w-full text-white px-4 py-2 rounded-md bg-blue-600 hover:bg-blue-500 transition duration-300 mt-2 disabled:bg-blue-300"
+                    >
+                        {isDeleting ? "Deleting..." : "Delete"}
+                    </button>
+                </div>
             </div>
-          </div>
+            <br />
         </>
-      );
-      
+    );
 }
+
+export default MyProduct;
